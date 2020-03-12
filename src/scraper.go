@@ -72,6 +72,14 @@ func main() {
 
 	sortByKey(wordCountMap)
 
+	keyWord := "coronavirus"
+
+	if value, ok := wordCountMap[keyWord]; ok {
+		fmt.Println("Key Word: "+ keyWord + " Found: ", value)
+	} else {
+		fmt.Println("Key not found.")
+	}
+
 
 
 }
