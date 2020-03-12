@@ -44,19 +44,24 @@ func main() {
 
 	wordCountMap := wordCount(noStopWords)
 
+	// printSortedKey(pageDetails.Headings)
 	printSortedKey(wordCountMap)
 
-	fmt.Println("Total Keys: " + strconv.Itoa(len(pageDetails.Headings)))
+	fmt.Println("Total Keys: " + strconv.Itoa(len(wordCountMap)))
 
 	keyWord1 := "coronavirus"
 	keyWord2 := "quarantine"
 	keyWord3 := "trump"
-	keyWord4 := "biden"
+	keyWord4 := "trump's"
+	keyWord5 := "biden"
+	keyWord6 := "covid-"
 
 	keyWordCount(wordCountMap, keyWord1)
 	keyWordCount(wordCountMap, keyWord2)
 	keyWordCount(wordCountMap, keyWord3)
 	keyWordCount(wordCountMap, keyWord4)
+	keyWordCount(wordCountMap, keyWord5)
+	keyWordCount(wordCountMap, keyWord6)
 
 }
 
@@ -80,7 +85,7 @@ func printSortedKey(countMap map[string]int) {
 	sort.Strings(keys)
 
 	for _, k := range keys {
-		fmt.Println(k, countMap[k])
+		fmt.Println(k, (countMap[k]))
 	}
 
 }
@@ -102,10 +107,18 @@ func wordCount(str string) map[string]int {
 // Concats our keys together, then we can parse and split with Stop words
 func KeysString(m map[string]int) string {
 	keys := make([]string, 0, len(m))
-	for k := range m {
-		keys = append(keys, k)
+	for k, element := range m {
+		if element == 1 {
+			keys = append(keys, (k))
+		} else {
+			for i := 0; i < element; i++ {
+				keys = append(keys, (k))
+			}
+		}
 	}
-	return strings.Join(keys, " ")
+	joined := strings.Join(keys, " ")
+
+	return joined
 }
 
 func scrape(pageDetails pageInfo) {
