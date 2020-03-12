@@ -33,58 +33,53 @@ func main() {
 	// Initialize PageInfo struct of maps
 	pageDetails := &pageInfo{Links: make(map[string]int), Headings: make(map[string]int)}
 	
-
 	//Pass our struct to the Scrape function, able to modularize other processes
 	scrape(*pageDetails)
 
-	// //Print key and number of occurences ( element )
-	// for key, element := range pageDetails.Headings {
-
-	// 	fmt.Println("Key:", key, "=>", "Element:", element)
-	// }
-
-	fmt.Println("Total Keys: " + strconv.Itoa(len(pageDetails.Headings)))
-
-	//Returns count for number of times key appears on page
-	if value, ok := pageDetails.Headings["Explaining Trump's blowout numbers in primary states"]; ok {
-		fmt.Println("value: ", value)
-	} else {
-		fmt.Println("key not found")
-	}
-	
 	concatString := KeysString(pageDetails.Headings)
 
 	//cleanString gets rid of stopwords, english lang parameter, 
 	//and false is for HTML tags, so we could try to use this function earliar on with our scraped content.
 	noStopWords := stopwords.CleanString(concatString, "english", false)
 
-
 	// fmt.Println(concatString)
 	// fmt.Println(noStopWords)
-
 	
-
 	for index,element := range wordCount(noStopWords){
         fmt.Println(index,"=>",element)
 	}
 	
 	wordCountMap := wordCount(noStopWords)
 
-	sortByKey(wordCountMap)
+	printSortedKey(wordCountMap)
 
-	keyWord := "coronavirus"
+	fmt.Println("Total Keys: " + strconv.Itoa(len(pageDetails.Headings)))
 
-	if value, ok := wordCountMap[keyWord]; ok {
-		fmt.Println("Key Word: "+ keyWord + " Found: ", value)
+	keyWord1 := "coronavirus"
+	keyWord2 := "quarantine"
+	keyWord3 := "trump"
+	keyWord4 := "biden"
+
+
+	keyWordCount(wordCountMap, keyWord1)
+	keyWordCount(wordCountMap, keyWord2)
+	keyWordCount(wordCountMap, keyWord3)
+	keyWordCount(wordCountMap, keyWord4)
+
+}
+
+func keyWordCount(countMap map[string]int, keyWord string) {
+
+	//returns count on our cleaned up map of words for a provided keyWord
+	if value, ok := countMap[keyWord]; ok {
+		fmt.Println("KeyWord: "+ keyWord + ", # of times found: ", value)
 	} else {
 		fmt.Println("Key not found.")
 	}
 
-
-
 }
 
-func sortByKey(countMap map[string]int) {
+func printSortedKey(countMap map[string]int) {
 
 	keys := make([]string, 0, len(countMap))
 	for k := range countMap {
@@ -95,7 +90,6 @@ func sortByKey(countMap map[string]int) {
 	for _, k := range keys {
 	        fmt.Println(k, countMap[k])
 	}
-
 
 }
 
@@ -187,8 +181,6 @@ func scrape(pageDetails pageInfo) {
 	
 		// })
 	
-	
-
 
 
 		// START scraping on.... en.wikipedia.org, foxnews.com, cnn.com, etc...
