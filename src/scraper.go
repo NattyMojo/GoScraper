@@ -23,11 +23,6 @@ type pageInfo struct {
 	StatusCode int
 	Links      map[string]int
 	Headings   map[string]int
-<<<<<<< HEAD
- }
-=======
-}
->>>>>>> 5106db5bb01347a1549171f5054c14cea9af0094
 
 func main() {
 
@@ -45,11 +40,7 @@ func main() {
 
 	// fmt.Println(concatString)
 	// fmt.Println(noStopWords)
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> 5106db5bb01347a1549171f5054c14cea9af0094
 	wordCountMap := wordCount(noStopWords)
 
 	printSortedKey(wordCountMap)
