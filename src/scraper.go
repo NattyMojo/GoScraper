@@ -7,6 +7,8 @@ import (
 
 	"strings"
 
+	"sort"
+
 	// run go get -u github.com/gocolly/colly if you get an error for this package
 	// if you are in your $GOPATH, it should find it. If not manually add it to the directory it is looking
 
@@ -52,12 +54,57 @@ func main() {
 	
 	concatString := KeysString(pageDetails.Headings)
 
+	//cleanString gets rid of stopwords, english lang parameter, 
+	//and false is for HTML tags, so we could try to use this function earliar on with our scraped content.
 	noStopWords := stopwords.CleanString(concatString, "english", false)
 
-	fmt.Println(noStopWords)
+
 	// fmt.Println(concatString)
+	// fmt.Println(noStopWords)
+
+	
+
+	for index,element := range wordCount(noStopWords){
+        fmt.Println(index,"=>",element)
+	}
+	
+	wordCountMap := wordCount(noStopWords)
+
+	sortByKey(wordCountMap)
+
+
+
 }
 
+func sortByKey(countMap map[string]int) {
+
+	keys := make([]string, 0, len(countMap))
+	for k := range countMap {
+        keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+	        fmt.Println(k, countMap[k])
+	}
+
+
+}
+
+
+func wordCount(str string) map[string]int {
+    wordList := strings.Fields(str)
+    counts := make(map[string]int)
+    for _, word := range wordList {
+        _, ok := counts[word]
+        if ok {
+            counts[word] += 1
+        } else {
+            counts[word] = 1
+        }
+    }
+    return counts
+}
 
 // Concats our keys together, then we can parse and split with Stop words
 func KeysString(m map[string]int) string {
