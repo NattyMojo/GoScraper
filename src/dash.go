@@ -14,7 +14,7 @@ func startDash() {
 
 	// Create astilectron
 	a, err := astilectron.New(l, astilectron.Options{
-		AppName:           "This is test",
+		AppName:           "GoScraping",
 		BaseDirectoryPath: "src",
 	})
 	if err != nil {
@@ -24,6 +24,12 @@ func startDash() {
 
 	// Handle signals
 	a.HandleSignals()
+
+  // Add a listener on Astilectron
+  a.On(astilectron.EventNameAppCrash, func(e astilectron.Event) (deleteListener bool) {
+      log.Println("App has crashed")
+      return
+  })
 
 	// Start
 	if err = a.Start(); err != nil {
@@ -39,6 +45,13 @@ func startDash() {
 	}); err != nil {
 		l.Fatal(fmt.Errorf("main: new window failed: %w", err))
 	}
+
+  // Add a listener on the window
+  // This one alerts when the Window is resized
+  // w.On(astilectron.EventNameWindowEventResize, func(e astilectron.Event) (deleteListener bool) {
+  //     log.Println("Window resized")
+  //     return
+  // })
 
 	// Create windows
 	if err = w.Create(); err != nil {
