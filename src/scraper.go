@@ -86,8 +86,7 @@ func printSortedKey(countMap map[string]int) {
 
 	for _, k := range keys {
 		fmt.Println(k, countMap[k])
-
-
+	}
 }
 
 func wordCount(str string) map[string]int {
