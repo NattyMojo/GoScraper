@@ -26,7 +26,6 @@ type pageInfo struct {
 }
 
 func main() {
-
 	// Initialize PageInfo struct of maps
 	pageDetails := &pageInfo{Links: make(map[string]int), Headings: make(map[string]int)}
 
@@ -62,6 +61,8 @@ func main() {
 	keyWordCount(wordCountMap, keyWord4)
 	keyWordCount(wordCountMap, keyWord5)
 	keyWordCount(wordCountMap, keyWord6)
+
+	startDash()
 
 }
 
