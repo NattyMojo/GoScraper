@@ -19,10 +19,16 @@ type pageInfo struct {
 	Links      map[string]int
 	Headings   map[string]int
 }
+type headlineCounts struct {
+	Info 	   map[[2]string][20]int
+}
 
 func main() {
 	// Initialize PageInfo struct of maps
 	pageDetails := &pageInfo{Links: make(map[string]int), Headings: make(map[string]int)}
+	
+	//Initialize headline counts struct
+	hCounts := &headlineCounts{Info: make(map[[2]string][20]int)}
 
 	//Pass our struct to the Scrape function, able to modularize other processes
 	scrape(*pageDetails)
@@ -57,10 +63,68 @@ func main() {
 	keyWordCount(wordCountMap, keyWord5)
 	keyWordCount(wordCountMap, keyWord6)
 
-	link1 := "https://www.nbcnews.com/news/us-news/texas-gov-wants-slowly-reopen-private-business-trump-says-s-n1182886"	//Something from NBC
-	link2 := "https://www.breitbart.com/politics/2020/04/13/dr-anthony-fauci-repeatedly-downplayed-coronavirus-threat/"		//Something from Breitbart
+	link1 := ""		//Something from NBC
+	link2 := ""		//Something from Breitbart
+	//Compare headlines (It's nasty I know)
+	for k := range pageDetails.Links {
+		if !strings.Contains(k, "mailto") && strings.Contains(k, "nbc") && (strings.Contains(k, keyWord2) || strings.Contains(k, keyWord3) || strings.Contains(k, keyWord4) || strings.Contains(k, keyWord5) || strings.Contains(k, keyWord6)){
+			for m := range pageDetails.Links {
+				if !strings.Contains(k, "mailto") && strings.Contains(m, "breitbart") && (strings.Contains(m, keyWord2) || strings.Contains(m, keyWord3) || strings.Contains(m, keyWord4) || strings.Contains(m, keyWord5) || strings.Contains(m, keyWord6)){
+					n := strings.Split(k, "/")
+					b := strings.Split(m, "/")
+					headlineNBC, headlineBreit := "", ""
+					//fmt.Println(n)
+					//fmt.Println(b)
+					for headNBC := range n {
+						if len(n[headNBC]) > 17 {
+							headlineNBC = n[headNBC]
+							//fmt.Println(headlineNBC)
+						}
+					}
+					for headB := range b {
+						if len(b[headB]) > 17 {
+							headlineBreit = b[headB]
+							//fmt.Println(headlineBreit)
+						}
+					}
+					splitHeadN := strings.Split(headlineNBC, "-")
+					splitHeadB := strings.Split(headlineBreit, "-")
+					var sums [20]int
+					for i := range splitHeadN {
+						for j := range splitHeadB {
+							if splitHeadN[i] == splitHeadB[j] && len(splitHeadN[i]) > 1{
+								//fmt.Println(splitHeadN[i] + " " + splitHeadB[j])
+								sums[i] += 1
+							}
+						}
+					}
+					var links [2]string
+					links[0] = k
+					links[1] = m
+					hCounts.Info[links] = sums
+				}
+			}
+		}	
+	}
+	//fmt.Println(hCounts.Info)
+	var tempKey [2]string
+	tempSum := 0
+	for key := range hCounts.Info {
+		currSum := 0
+		for i := 0; i < len(hCounts.Info[key]); i++ {
+			currSum += hCounts.Info[key][i]
+		}
+		if currSum > tempSum {
+			tempSum = currSum
+			tempKey = key
+		}
+	}
+	fmt.Println(tempSum)
+	fmt.Println(tempKey)
+	link1 = tempKey[0]
+	link2 = tempKey[1]
 
-	//Possibly build the index.html file here? (This does work btw after testing it)
+	//Build the new index.html file
 	create_index(link1, link2)
 
 	startDash()
