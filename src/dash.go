@@ -40,8 +40,8 @@ func startDash() {
 	var w *astilectron.Window
 	if w, err = a.NewWindow("index.html", &astilectron.WindowOptions{
 		Center: astikit.BoolPtr(true),
-		Height: astikit.IntPtr(700),
-		Width:  astikit.IntPtr(700),
+		Height: astikit.IntPtr(850),
+		Width:  astikit.IntPtr(1200),
 	}); err != nil {
 		l.Fatal(fmt.Errorf("main: new window failed: %w", err))
 	}

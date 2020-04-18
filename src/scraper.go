@@ -64,7 +64,7 @@ func main() {
 		return
 	}
 			//This takes care of the beginning of the file, up to where we put in the first link
-	l, err := f.WriteString("<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n <meta charset=\"UTF-8\">\n<link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n<div>\n")
+	l, err := f.WriteString("<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n <meta charset=\"UTF-8\">\n</head>\n<body>\n<div>\n")
 	if err != nil {
 		fmt.Println("Couldn't write to file: index.html",l)
 		return
