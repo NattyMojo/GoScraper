@@ -57,43 +57,11 @@ func main() {
 	keyWordCount(wordCountMap, keyWord5)
 	keyWordCount(wordCountMap, keyWord6)
 
-	//Possibly build the index.html file here? (This does work btw after testing it)
-	f, err := os.Create("index.html")
-	if err != nil {
-		fmt.Println("Had error creating: index.html")
-		return
-	}
-			//This takes care of the beginning of the file, up to where we put in the first link
-	l, err := f.WriteString("<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n <meta charset=\"UTF-8\">\n</head>\n<body>\n<div>\n")
-	if err != nil {
-		fmt.Println("Couldn't write to file: index.html",l)
-		return
-	}
-			//Insert first URL, all we need is to change the URL under "src"
-	l, err = f.WriteString("<iframe src=\"https://www.nbcnews.com/news/us-news/texas-gov-wants-slowly-reopen-private-business-trump-says-s-n1182886\" style=\"height:100%;width:50%;position:absolute;top:0;left:0\"></iframe>\n")
-	if err != nil {
-		fmt.Println("Couldn't write to file: index.html")
-		return
-	}
-			//Insert Second URL, change the URL under "src"
-	l, err = f.WriteString("<iframe src=\"https://www.breitbart.com/politics/2020/04/13/dr-anthony-fauci-repeatedly-downplayed-coronavirus-threat/\" style=\"height:100%;width:50%;position:absolute;top:0;right:0\"></iframe>\n")
-	if err != nil {
-		fmt.Println("Couldn't write to file: index.html")
-		return
-	}
-			//Finish it off
-	l, err = f.WriteString("</div>\n</body>\n</html>")
-	if err != nil {
-		fmt.Println("Couldn't write to file: index.html")
-		return
-	}
-	//Close the File
-	err = f.Close()
-	if err != nil {
-		fmt.Println("Couldn't close file: index.html")
-		return
-	}
+	link1 := "https://www.nbcnews.com/news/us-news/texas-gov-wants-slowly-reopen-private-business-trump-says-s-n1182886"	//Something from NBC
+	link2 := "https://www.breitbart.com/politics/2020/04/13/dr-anthony-fauci-repeatedly-downplayed-coronavirus-threat/"		//Something from Breitbart
 
+	//Possibly build the index.html file here? (This does work btw after testing it)
+	create_index(link1, link2)
 
 	startDash()
 
@@ -228,4 +196,43 @@ func scrape(pageDetails pageInfo) {
 
 	// Wait until threads are finished
 	c.Wait()
+}
+
+//Create index.html
+func create_index(s1 string, s2 string) {
+	f, err := os.Create("index.html")
+	if err != nil {
+		fmt.Println("Had error creating: index.html")
+		return
+	}
+			//This takes care of the beginning of the file, up to where we put in the first link
+	_, err = f.WriteString("<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n <meta charset=\"UTF-8\">\n</head>\n<body>\n<div>\n")
+	if err != nil {
+		fmt.Println("Couldn't write to file: index.html")
+		return
+	}
+			//Insert first URL, all we need is to change the URL under "src"
+	_, err = f.WriteString("<iframe src=\"" + s1 + "\" style=\"height:100%;width:50%;position:absolute;top:0;left:0\"></iframe>\n")
+	if err != nil {
+		fmt.Println("Couldn't write to file: index.html")
+		return
+	}
+			//Insert Second URL, change the URL under "src"
+	_, err = f.WriteString("<iframe src=\"" + s2 + "\" style=\"height:100%;width:50%;position:absolute;top:0;right:0\"></iframe>\n")
+	if err != nil {
+		fmt.Println("Couldn't write to file: index.html")
+		return
+	}
+			//Finish it off
+	_, err = f.WriteString("</div>\n</body>\n</html>")
+	if err != nil {
+		fmt.Println("Couldn't write to file: index.html")
+		return
+	}
+	//Close the File
+	err = f.Close()
+	if err != nil {
+		fmt.Println("Couldn't close file: index.html")
+		return
+	}
 }
