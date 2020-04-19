@@ -6,7 +6,7 @@
 
 package main
 
-// This file replaces main.go when running godoc under app-engine.
+// This file replaces scrapi.go when running godoc under app-engine.
 // See README.godoc-app for details.
 
 import (
@@ -76,7 +76,7 @@ func main() {
 
 	corpus := godoc.NewCorpus(fs)
 	corpus.Verbose = false
-	corpus.MaxResults = 10000 // matches flag default in main.go
+	corpus.MaxResults = 10000 // matches flag default in scrapi.go
 	corpus.IndexEnabled = true
 	corpus.IndexFiles = indexFilenames
 	if err := corpus.Init(); err != nil {

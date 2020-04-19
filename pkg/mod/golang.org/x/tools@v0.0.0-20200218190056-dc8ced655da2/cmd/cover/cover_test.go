@@ -32,7 +32,7 @@ var debug = false // Keeps the rewritten files around if set.
 //	replace the word LINE with the line number < testdata/test.go > testdata/test_line.go
 // 	go build -o ./testcover
 // 	./testcover -mode=count -var=CoverTest -o ./testdata/test_cover.go testdata/test_line.go
-//	go run ./testdata/main.go ./testdata/test.go
+//	go run ./testdata/scrapi.go ./testdata/test.go
 //
 func TestCover(t *testing.T) {
 	testenv.NeedsTool(t, "go")
@@ -50,7 +50,7 @@ func TestCover(t *testing.T) {
 	}()
 
 	testcover := filepath.Join(tmpdir, "testcover.exe")
-	testMain := filepath.Join(tmpdir, "main.go")
+	testMain := filepath.Join(tmpdir, "scrapi.go")
 	testTest := filepath.Join(tmpdir, "test.go")
 	coverInput := filepath.Join(tmpdir, "test_line.go")
 	coverOutput := filepath.Join(tmpdir, "test_cover.go")
@@ -92,7 +92,7 @@ func TestCover(t *testing.T) {
 		defer os.Remove(coverOutput)
 	}
 
-	// go run ./testdata/main.go ./testdata/test.go
+	// go run ./testdata/scrapi.go ./testdata/test.go
 	cmd = exec.Command("go", "run", testMain, coverOutput)
 	run(cmd, t)
 }

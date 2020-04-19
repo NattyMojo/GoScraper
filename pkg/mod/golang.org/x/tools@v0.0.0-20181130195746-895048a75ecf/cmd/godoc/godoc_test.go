@@ -360,7 +360,7 @@ const C = 3
 var V T
 func (T) F() int { return C }
 `},
-		{"gopath/src/app/main.go", `
+		{"gopath/src/app/scrapi.go", `
 package main
 import "lib"
 func main() { print(lib.V) }
@@ -423,9 +423,9 @@ tryagain:
 		{"/src/lib/lib.go", "L5.*var V .*type T struct"},
 		{"/src/lib/lib.go", "L6.*func .*type T struct.*T.*return .*const C untyped int.*C"},
 
-		{"/src/app/main.go", "L2.*package .*Package docs for app"},
-		{"/src/app/main.go", "L3.*import .*Package docs for lib.*lib"},
-		{"/src/app/main.go", "L4.*func main.*package lib.*lib.*var lib.V lib.T.*V"},
+		{"/src/app/scrapi.go", "L2.*package .*Package docs for app"},
+		{"/src/app/scrapi.go", "L3.*import .*Package docs for lib.*lib"},
+		{"/src/app/scrapi.go", "L4.*func main.*package lib.*lib.*var lib.V lib.T.*V"},
 	} {
 		url := fmt.Sprintf("http://%s%s", addr, test.url)
 		resp, err := http.Get(url)

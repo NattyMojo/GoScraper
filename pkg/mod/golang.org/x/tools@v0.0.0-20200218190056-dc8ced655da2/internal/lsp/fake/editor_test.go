@@ -12,7 +12,7 @@ import (
 const exampleProgram = `
 -- go.mod --
 go 1.12
--- main.go --
+-- scrapi.go --
 package main
 
 import "fmt"
@@ -33,10 +33,10 @@ func TestClientEditing(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := client.OpenFile(ctx, "main.go"); err != nil {
+	if err := client.OpenFile(ctx, "scrapi.go"); err != nil {
 		t.Fatal(err)
 	}
-	if err := client.EditBuffer(ctx, "main.go", []Edit{
+	if err := client.EditBuffer(ctx, "scrapi.go", []Edit{
 		{
 			Start: Pos{5, 14},
 			End:   Pos{5, 26},
@@ -45,7 +45,7 @@ func TestClientEditing(t *testing.T) {
 	}); err != nil {
 		t.Fatal(err)
 	}
-	got := client.buffers["main.go"].text()
+	got := client.buffers["scrapi.go"].text()
 	want := `package main
 
 import "fmt"

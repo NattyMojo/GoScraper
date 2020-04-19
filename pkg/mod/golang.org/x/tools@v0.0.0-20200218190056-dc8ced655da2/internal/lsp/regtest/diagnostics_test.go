@@ -16,7 +16,7 @@ const exampleProgram = `
 module mod
 
 go 1.12
--- main.go --
+-- scrapi.go --
 package main
 
 import "fmt"
@@ -31,9 +31,9 @@ func TestDiagnosticErrorInEditedFile(t *testing.T) {
 		// Deleting the 'n' at the end of Println should generate a single error
 		// diagnostic.
 		edit := fake.NewEdit(5, 11, 5, 12, "")
-		env.OpenFile("main.go")
-		env.EditBuffer("main.go", edit)
-		env.Await(DiagnosticAt("main.go", 5, 5))
+		env.OpenFile("scrapi.go")
+		env.EditBuffer("scrapi.go", edit)
+		env.Await(DiagnosticAt("scrapi.go", 5, 5))
 	})
 }
 
@@ -46,16 +46,16 @@ func TestSimultaneousEdits(t *testing.T) {
 
 		// In editor #1, break fmt.Println as before.
 		edit1 := fake.NewEdit(5, 11, 5, 12, "")
-		env1.OpenFile("main.go")
-		env1.EditBuffer("main.go", edit1)
+		env1.OpenFile("scrapi.go")
+		env1.EditBuffer("scrapi.go", edit1)
 		// In editor #2 remove the closing brace.
 		edit2 := fake.NewEdit(6, 0, 6, 1, "")
-		env2.OpenFile("main.go")
-		env2.EditBuffer("main.go", edit2)
+		env2.OpenFile("scrapi.go")
+		env2.EditBuffer("scrapi.go", edit2)
 
 		// Now check that we got different diagnostics in each environment.
-		env1.Await(DiagnosticAt("main.go", 5, 5))
-		env2.Await(DiagnosticAt("main.go", 7, 0))
+		env1.Await(DiagnosticAt("scrapi.go", 5, 5))
+		env2.Await(DiagnosticAt("scrapi.go", 7, 0))
 	})
 }
 

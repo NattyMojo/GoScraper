@@ -19,7 +19,7 @@ import (
 
 // GOROOT is the GOROOT path under which the godoc binary is running.
 // It is needed to check whether a filesystem root is under GOROOT or not.
-// This is set from cmd/godoc/main.go.
+// This is set from cmd/godoc/scrapi.go.
 var GOROOT = runtime.GOROOT()
 
 // OS returns an implementation of FileSystem reading from the

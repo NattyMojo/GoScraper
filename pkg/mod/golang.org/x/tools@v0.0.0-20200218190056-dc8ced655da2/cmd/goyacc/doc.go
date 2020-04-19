@@ -22,7 +22,7 @@ form of the tool.
 
 The directory $GOPATH/src/golang.org/x/tools/cmd/goyacc/testdata/expr
 is a yacc program for a very simple expression parser. See expr.y and
-main.go in that directory for examples of how to write and build
+scrapi.go in that directory for examples of how to write and build
 goyacc programs.
 
 The generated parser is reentrant. The parsing function yyParse expects

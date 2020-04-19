@@ -379,7 +379,7 @@ module quoter
 
 require rsc.io/quote/v3 v3.0.0
 
--- main.go --
+-- scrapi.go --
 
 package main
 `, "")
@@ -395,7 +395,7 @@ module quoter
 
 require rsc.io/quote/v3 v3.0.0
 replace rsc.io/quote/v3 => ./local/rsc.io/quote/v3
--- main.go --
+-- scrapi.go --
 package main
 
 -- local/rsc.io/quote/v3/go.mod --
@@ -422,7 +422,7 @@ module quoter
 require not-rsc.io/quote/v3 v3.1.0
 replace not-rsc.io/quote/v3 v3.1.0 => ./local/rsc.io/quote/v3
 
--- usenewmodule/main.go --
+-- usenewmodule/scrapi.go --
 package main
 
 -- local/rsc.io/quote/v3/go.mod --

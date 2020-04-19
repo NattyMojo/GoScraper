@@ -7,7 +7,7 @@
 // This file adds automatic TLS certificate support (using
 // golang.org/x/crypto/acme/autocert), conditional on the use of the
 // autocert build tag. It sets the serveAutoCertHook func variable
-// non-nil. It is used by main.go.
+// non-nil. It is used by scrapi.go.
 //
 // TODO: make this the default? We're in the Go 1.8 freeze now, so
 // this is too invasive to be default, but we want it for

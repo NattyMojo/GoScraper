@@ -2070,11 +2070,11 @@ var c = &config.SystemConfig{}
 				Name: "mycompany.net/tool",
 				Files: fm{
 					"config/config.go": "package config\n type SystemConfig struct {}", // Local package should be promoted over shorter package
-					"main.go":          input,
+					"scrapi.go":          input,
 				},
 			},
 		},
-	}.processTest(t, "mycompany.net/tool", "main.go", nil, nil, want)
+	}.processTest(t, "mycompany.net/tool", "scrapi.go", nil, nil, want)
 }
 
 // Tests FindImportInLocalGoFiles looks at the import lines for other Go files in the
@@ -2098,7 +2098,7 @@ var _ = &bytes.Buffer{}
 				Name: "mycompany.net/tool",
 				Files: fm{
 					"io.go":   "package main\n import \"bytes.net/bytes\"\n var _ = &bytes.Buffer{}", // Contains package import that will cause stdlib to be ignored
-					"main.go": input,
+					"scrapi.go": input,
 				},
 			},
 			{
@@ -2106,7 +2106,7 @@ var _ = &bytes.Buffer{}
 				Files: fm{"bytes.go": "package bytes\n type Buffer struct {}"}, // Should be selected over standard library
 			},
 		},
-	}.processTest(t, "mycompany.net/tool", "main.go", nil, nil, want)
+	}.processTest(t, "mycompany.net/tool", "scrapi.go", nil, nil, want)
 }
 
 func TestInMemoryFile(t *testing.T) {
@@ -2138,7 +2138,7 @@ import "bytes"
 var _ = &bytes.Buffer{}
 `
 
-	buf, err := Process("mycompany.net/tool/main.go", []byte(input), nil)
+	buf, err := Process("mycompany.net/tool/scrapi.go", []byte(input), nil)
 	if err != nil {
 		t.Fatalf("Process() = %v", err)
 	}

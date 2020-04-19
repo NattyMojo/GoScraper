@@ -9,7 +9,7 @@
 //
 // For example, if example.org/findbadness is an analysis package,
 // all that is needed to define a standalone tool is a file,
-// example.org/findbadness/cmd/findbadness/main.go, containing:
+// example.org/findbadness/cmd/findbadness/scrapi.go, containing:
 //
 //      // The findbadness command runs an analysis.
 // 	package main

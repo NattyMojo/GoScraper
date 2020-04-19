@@ -694,7 +694,7 @@ func TestCycles(t *testing.T) {
 			"self-cycle in dependency of test file",
 			buildutil.FakeContext(map[string]map[string]string{
 				"main": {
-					"main.go":      `package main`,
+					"scrapi.go":      `package main`,
 					"main_test.go": `package main; import _ "a"`,
 				},
 				"a": {
@@ -708,7 +708,7 @@ func TestCycles(t *testing.T) {
 		// 	"two-package cycle in dependency of test file",
 		// 	buildutil.FakeContext(map[string]map[string]string{
 		// 		"main": {
-		// 			"main.go":      `package main`,
+		// 			"scrapi.go":      `package main`,
 		// 			"main_test.go": `package main; import _ "a"`,
 		// 		},
 		// 		"a": {
@@ -721,7 +721,7 @@ func TestCycles(t *testing.T) {
 		// 	"self-cycle in augmented package",
 		// 	buildutil.FakeContext(map[string]map[string]string{
 		// 		"main": {
-		// 			"main.go":      `package main`,
+		// 			"scrapi.go":      `package main`,
 		// 			"main_test.go": `package main; import _ "main"`,
 		// 		},
 		// 	}),

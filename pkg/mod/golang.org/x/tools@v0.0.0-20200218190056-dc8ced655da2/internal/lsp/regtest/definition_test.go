@@ -17,7 +17,7 @@ const internalDefinition = `
 module mod
 
 go 1.12
--- main.go --
+-- scrapi.go --
 package main
 
 import "fmt"
@@ -34,8 +34,8 @@ const message = "Hello World."
 func TestGoToInternalDefinition(t *testing.T) {
 	t.Parallel()
 	runner.Run(t, internalDefinition, func(ctx context.Context, t *testing.T, env *Env) {
-		env.OpenFile("main.go")
-		name, pos := env.GoToDefinition("main.go", fake.Pos{Line: 5, Column: 13})
+		env.OpenFile("scrapi.go")
+		name, pos := env.GoToDefinition("scrapi.go", fake.Pos{Line: 5, Column: 13})
 		if want := "const.go"; name != want {
 			t.Errorf("GoToDefinition: got file %q, want %q", name, want)
 		}
@@ -50,7 +50,7 @@ const stdlibDefinition = `
 module mod
 
 go 1.12
--- main.go --
+-- scrapi.go --
 package main
 
 import (
@@ -65,8 +65,8 @@ func main() {
 func TestGoToStdlibDefinition(t *testing.T) {
 	t.Parallel()
 	runner.Run(t, stdlibDefinition, func(ctx context.Context, t *testing.T, env *Env) {
-		env.OpenFile("main.go")
-		name, pos := env.GoToDefinition("main.go", fake.Pos{Line: 8, Column: 19})
+		env.OpenFile("scrapi.go")
+		name, pos := env.GoToDefinition("scrapi.go", fake.Pos{Line: 8, Column: 19})
 		if got, want := path.Base(name), "time.go"; got != want {
 			t.Errorf("GoToDefinition: got file %q, want %q", name, want)
 		}

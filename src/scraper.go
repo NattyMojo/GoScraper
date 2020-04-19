@@ -3,16 +3,23 @@ package main
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
-	"sort"
 	// run go get -u github.com/gocolly/colly if you get an error for this package
 	// if you are in your $GOPATH, it should find it. If not manually add it to the directory it is looking
+
 	"github.com/gocolly/colly"
 	// used to eliminate stopwords
 	"github.com/bbalet/stopwords"
-	//ALSO, if you haven't figured it out yet... run go build in the src directory, then to execute run src.exe
 )
+
+/*
+	if you're still having problems. try (in goland) right clicking on "src" that is the parent folder to this
+ 	click open in terminal (or navigate here in a terminal of your choice). then run: go get -u -v
+	This should get all the dependencies.
+*/
+
 
 type pageInfo struct {
 	StatusCode int
@@ -25,6 +32,7 @@ type headlineCounts struct {
 
 func main() {
 	// Initialize PageInfo struct of maps
+	go startApi() //starts the Api, comment this line out if you see anything related to "scrapi", or sql connections.
 	pageDetails := &pageInfo{Links: make(map[string]int), Headings: make(map[string]int)}
 	
 	//Initialize headline counts struct

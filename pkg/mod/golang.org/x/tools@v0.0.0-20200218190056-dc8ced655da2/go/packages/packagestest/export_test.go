@@ -96,7 +96,7 @@ func TestGroupFilesByModules(t *testing.T) {
 				{
 					Name: "testdata/groups/one",
 					Files: map[string]interface{}{
-						"main.go": true,
+						"scrapi.go": true,
 					},
 				},
 				{
@@ -113,7 +113,7 @@ func TestGroupFilesByModules(t *testing.T) {
 				{
 					Name: "testdata/groups/two",
 					Files: map[string]interface{}{
-						"main.go":      true,
+						"scrapi.go":      true,
 						"expect/yo.go": true,
 					},
 				},
@@ -134,19 +134,19 @@ func TestGroupFilesByModules(t *testing.T) {
 				{
 					Name: "example.com/tempmod",
 					Files: map[string]interface{}{
-						"main.go": true,
+						"scrapi.go": true,
 					},
 				},
 				{
 					Name: "example.com/what@v1.0.0",
 					Files: map[string]interface{}{
-						"main.go": true,
+						"scrapi.go": true,
 					},
 				},
 				{
 					Name: "example.com/what@v1.1.0",
 					Files: map[string]interface{}{
-						"main.go": true,
+						"scrapi.go": true,
 					},
 				},
 			},

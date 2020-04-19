@@ -238,36 +238,36 @@ func TestGuru(t *testing.T) {
 
 	for _, filename := range []string{
 		"testdata/src/alias/alias.go",
-		"testdata/src/calls/main.go",
-		"testdata/src/describe/main.go",
-		"testdata/src/freevars/main.go",
-		"testdata/src/implements/main.go",
-		"testdata/src/implements-methods/main.go",
-		"testdata/src/imports/main.go",
-		"testdata/src/peers/main.go",
-		"testdata/src/pointsto/main.go",
-		"testdata/src/referrers/main.go",
-		"testdata/src/reflection/main.go",
-		"testdata/src/what/main.go",
-		"testdata/src/whicherrs/main.go",
-		"testdata/src/softerrs/main.go",
+		"testdata/src/calls/scrapi.go",
+		"testdata/src/describe/scrapi.go",
+		"testdata/src/freevars/scrapi.go",
+		"testdata/src/implements/scrapi.go",
+		"testdata/src/implements-methods/scrapi.go",
+		"testdata/src/imports/scrapi.go",
+		"testdata/src/peers/scrapi.go",
+		"testdata/src/pointsto/scrapi.go",
+		"testdata/src/referrers/scrapi.go",
+		"testdata/src/reflection/scrapi.go",
+		"testdata/src/what/scrapi.go",
+		"testdata/src/whicherrs/scrapi.go",
+		"testdata/src/softerrs/scrapi.go",
 		// JSON:
 		// TODO(adonovan): most of these are very similar; combine them.
-		"testdata/src/calls-json/main.go",
-		"testdata/src/peers-json/main.go",
-		"testdata/src/definition-json/main.go",
-		"testdata/src/describe-json/main.go",
-		"testdata/src/implements-json/main.go",
-		"testdata/src/implements-methods-json/main.go",
-		"testdata/src/pointsto-json/main.go",
-		"testdata/src/referrers-json/main.go",
-		"testdata/src/what-json/main.go",
+		"testdata/src/calls-json/scrapi.go",
+		"testdata/src/peers-json/scrapi.go",
+		"testdata/src/definition-json/scrapi.go",
+		"testdata/src/describe-json/scrapi.go",
+		"testdata/src/implements-json/scrapi.go",
+		"testdata/src/implements-methods-json/scrapi.go",
+		"testdata/src/pointsto-json/scrapi.go",
+		"testdata/src/referrers-json/scrapi.go",
+		"testdata/src/what-json/scrapi.go",
 	} {
 		filename := filename
 		name := strings.Split(filename, "/")[2]
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()
-			if filename == "testdata/src/referrers/main.go" && runtime.GOOS == "plan9" {
+			if filename == "testdata/src/referrers/scrapi.go" && runtime.GOOS == "plan9" {
 				// Disable this test on plan9 since it expects a particular
 				// wording for a "no such file or directory" error.
 				t.Skip()

@@ -2042,7 +2042,7 @@ var _ = fmt.Printf
 		module: packagestest.Module{
 			Name: "foo.com",
 			Files: fm{
-				"pkg/main.go": declaresGlobal,
+				"pkg/scrapi.go": declaresGlobal,
 				"pkg/uses.go": input,
 			},
 		},
@@ -2071,7 +2071,7 @@ var _, _ = fmt.Printf, bytes.Equal
 		module: packagestest.Module{
 			Name: "foo.com",
 			Files: fm{
-				"pkg/main.go": declaresGlobal,
+				"pkg/scrapi.go": declaresGlobal,
 				"pkg/uses.go": input,
 			},
 		},
@@ -2155,7 +2155,7 @@ var _ = fmt.Printf
 		module: packagestest.Module{
 			Name: "foo.com",
 			Files: fm{
-				"pkg/main.go": sibling,
+				"pkg/scrapi.go": sibling,
 				"pkg/uses.go": input,
 			},
 		},
@@ -2387,11 +2387,11 @@ var c = &config.SystemConfig{}
 				Name: "mycompany.net/tool",
 				Files: fm{
 					"config/config.go": "package config\n type SystemConfig struct {}", // Local package should be promoted over shorter package
-					"main.go":          input,
+					"scrapi.go":          input,
 				},
 			},
 		},
-	}.processTest(t, "mycompany.net/tool", "main.go", nil, nil, want)
+	}.processTest(t, "mycompany.net/tool", "scrapi.go", nil, nil, want)
 }
 
 // Tests FindImportInLocalGoFiles looks at the import lines for other Go files in the
@@ -2415,7 +2415,7 @@ var _ = &bytes.Buffer{}
 				Name: "mycompany.net/tool",
 				Files: fm{
 					"io.go":   "package main\n import \"bytes.net/bytes\"\n var _ = &bytes.Buffer{}", // Contains package import that will cause stdlib to be ignored
-					"main.go": input,
+					"scrapi.go": input,
 				},
 			},
 			{
@@ -2423,7 +2423,7 @@ var _ = &bytes.Buffer{}
 				Files: fm{"bytes.go": "package bytes\n type Buffer struct {}"}, // Should be selected over standard library
 			},
 		},
-	}.processTest(t, "mycompany.net/tool", "main.go", nil, nil, want)
+	}.processTest(t, "mycompany.net/tool", "scrapi.go", nil, nil, want)
 }
 
 func TestInMemoryFile(t *testing.T) {
@@ -2459,7 +2459,7 @@ var _ = &bytes.Buffer{}
 			Name: "mycompany.net",
 		},
 	}.test(t, func(t *goimportTest) {
-		buf, err := t.processNonModule("mycompany.net/tool/main.go", []byte(input), nil)
+		buf, err := t.processNonModule("mycompany.net/tool/scrapi.go", []byte(input), nil)
 		if err != nil {
 			t.Fatalf("Process() = %v", err)
 		}

@@ -1084,7 +1084,7 @@ func testNewPackagesInOverlay(t *testing.T, exporter packagestest.Exporter) {
 			`"efgh_"`},
 		{"main_overlay",
 			map[string][]byte{
-				filepath.Join(dir, "e", "main.go"): []byte(`package main; import "golang.org/fake/a"; const E = "e" + a.A; func main(){}`)},
+				filepath.Join(dir, "e", "scrapi.go"): []byte(`package main; import "golang.org/fake/a"; const E = "e" + a.A; func main(){}`)},
 			`"eabc"`},
 	} {
 		t.Run(test.name, func(t *testing.T) {
@@ -1283,24 +1283,24 @@ go 1.11
 		t.Fatal(err)
 	}
 
-	// Run packages.Load on mod2, while passing the contents over mod1/main.go in the overlay.
+	// Run packages.Load on mod2, while passing the contents over mod1/scrapi.go in the overlay.
 	config := &packages.Config{
 		Dir:  mod2,
 		Env:  append(os.Environ(), "GOPACKAGESDRIVER=off"),
 		Mode: packages.LoadImports,
 		Overlay: map[string][]byte{
-			filepath.Join(mod1, "main.go"): []byte(`package main
+			filepath.Join(mod1, "scrapi.go"): []byte(`package main
 import "golang.org/x/xerrors"
 func main() {
 	_ = errors.New("")
 }
 `),
-			filepath.Join(mod2, "main.go"): []byte(`package main
+			filepath.Join(mod2, "scrapi.go"): []byte(`package main
 func main() {}
 `),
 		},
 	}
-	if _, err := packages.Load(config, fmt.Sprintf("file=%s", filepath.Join(mod2, "main.go"))); err != nil {
+	if _, err := packages.Load(config, fmt.Sprintf("file=%s", filepath.Join(mod2, "scrapi.go"))); err != nil {
 		t.Fatal(err)
 	}
 
