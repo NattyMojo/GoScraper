@@ -12,40 +12,53 @@ import (
 const (
 	host     = "goscraper-db.cnwfupzwzfus.us-east-2.rds.amazonaws.com"
 	port     = 5432
-	user     = "scrapi"
-	password = "354scrapipw"
+	user	= "hamatitio"
+	password = "goscrapi"
 	dbname   = "goscraper"
+)
+
+var (
+	Db *sql.DB
 )
 
 func homePage(w http.ResponseWriter, r *http.Request){
 	fmt.Fprintf(w, "Homepage Endpoint Hit")
 
 }
+
 func handleRequests() {
-	myRouter := mux.NewRouter().StrictSlash(true)
-	myRouter.HandleFunc("/", homePage)
-	myRouter.HandleFunc("/article", AllArticles)
-	myRouter.HandleFunc("/article", AllArticles)
+	rt := mux.NewRouter().StrictSlash(true)
+	rt.HandleFunc("/api", homePage)
+	rt.HandleFunc("/api/sources", GetSources).Methods("GET")
+	rt.HandleFunc("/api/sources/{name}", GetSource).Methods("GET")
+	rt.HandleFunc("/api/sources", CreateSource).Methods("POST")
+	rt.HandleFunc("/api/articles", GetArticles).Methods("GET")
+	rt.HandleFunc("/api/articles/{address}", GetArticle).Methods("GET")
+	rt.HandleFunc("/api/articles", CreateArticle).Methods("POST")
 	fmt.Println("scraper-api started. Listening on port:8081")
-	log.Fatal(http.ListenAndServe(":8081", myRouter))
+	log.Fatal(http.ListenAndServe(":8081", rt))
 }
 
 func startApi(){
+	fmt.Println("Starting db connection")
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
-	db, err := sql.Open("postgres", psqlInfo)
+
+	var err error
+	Db, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
+	defer Db.Close()
 
-	err = db.Ping()
+	err = Db.Ping()
 	if err != nil {
 		panic(err)
 	}
-
 	fmt.Println("Starting scraper-api")
+	RefreshSources()
+	RefreshArticles()
 	handleRequests()
 }
 

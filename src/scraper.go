@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"net/http"
 	"os"
 	"sort"
-	"strconv"
 	"strings"
+
 	// run go get -u github.com/gocolly/colly if you get an error for this package
 	// if you are in your $GOPATH, it should find it. If not manually add it to the directory it is looking
 
@@ -15,8 +17,8 @@ import (
 )
 
 /*
-	if you're still having problems. try (in goland) right clicking on "src" that is the parent folder to this
- 	click open in terminal (or navigate here in a terminal of your choice). then run: go get -u -v
+	if you're still having problems. try (in goland) right clicking on "src" parent folder (user\go\src\GoScraper\src)
+ 	right click and open in terminal (or navigate here in a terminal of your choice). then run: go get -u -v
 	This should get all the dependencies.
 */
 
@@ -30,11 +32,13 @@ type headlineCounts struct {
 	Info 	   map[[2]string][20]int
 }
 
+
+
 func main() {
 	// Initialize PageInfo struct of maps
 	go startApi() //starts the Api, comment this line out if you see anything related to "scrapi", or sql connections.
 	pageDetails := &pageInfo{Links: make(map[string]int), Headings: make(map[string]int)}
-	
+	url := "http://localhost:8081/api/articles" //API code
 	//Initialize headline counts struct
 	hCounts := &headlineCounts{Info: make(map[[2]string][20]int)}
 
@@ -53,9 +57,9 @@ func main() {
 	wordCountMap := wordCount(noStopWords)
 
 	// printSortedKey(pageDetails.Headings)
-	printSortedKey(wordCountMap)
+	//printSortedKey(wordCountMap)
 
-	fmt.Println("Total Keys: " + strconv.Itoa(len(wordCountMap)))
+	//fmt.Println("Total Keys: " + strconv.Itoa(len(wordCountMap)))
 
 	keyWord1 := "coronavirus"
 	keyWord2 := "quarantine"
@@ -63,6 +67,7 @@ func main() {
 	keyWord4 := "trump's"
 	keyWord5 := "biden"
 	keyWord6 := "covid-"
+
 
 	keyWordCount(wordCountMap, keyWord1)
 	keyWordCount(wordCountMap, keyWord2)
@@ -75,33 +80,55 @@ func main() {
 	link2 := ""		//Something from Breitbart
 	//Compare headlines (It's nasty I know)
 	for k := range pageDetails.Links {
-		if !strings.Contains(k, "mailto") && strings.Contains(k, "nbc") && (strings.Contains(k, keyWord2) || strings.Contains(k, keyWord3) || strings.Contains(k, keyWord4) || strings.Contains(k, keyWord5) || strings.Contains(k, keyWord6)){
+		if !strings.Contains(k, "mailto") && strings.Contains(k, "nbcnews") && (strings.Contains(k, keyWord2) || strings.Contains(k, keyWord3) || strings.Contains(k, keyWord4) || strings.Contains(k, keyWord5) || strings.Contains(k, keyWord6)){
 			for m := range pageDetails.Links {
 				if !strings.Contains(k, "mailto") && strings.Contains(m, "breitbart") && (strings.Contains(m, keyWord2) || strings.Contains(m, keyWord3) || strings.Contains(m, keyWord4) || strings.Contains(m, keyWord5) || strings.Contains(m, keyWord6)){
 					n := strings.Split(k, "/")
 					b := strings.Split(m, "/")
 					headlineNBC, headlineBreit := "", ""
-					//fmt.Println(n)
-					//fmt.Println(b)
 					for headNBC := range n {
 						if len(n[headNBC]) > 17 {
 							headlineNBC = n[headNBC]
-							//fmt.Println(headlineNBC)
 						}
 					}
 					for headB := range b {
 						if len(b[headB]) > 17 {
 							headlineBreit = b[headB]
-							//fmt.Println(headlineBreit)
 						}
 					}
+
+
+					//API CODE
+					s := fmt.Sprintf(`{
+									"address":"%s",
+									"headline": "%s",
+									"source": "%s"}`, m, headlineBreit, "breitbart")
+					var jsonStr1 = []byte(s)
+					req1, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr1))
+					req1.Header.Set("Content-Type", "application/json")
+					s = fmt.Sprintf(`{
+									"address":"%s",
+									"headline": "%s",
+									"source": "%s"}`, k, headlineNBC, "nbcnews")
+					var jsonStr = []byte(s)
+					req, _ := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+					req.Header.Set("Content-Type", "application/json")
+
+					client := &http.Client{}
+					resp, _ := client.Do(req)
+					resp, _ = client.Do(req1)
+
+					defer resp.Body.Close()
+					//END API CODE
+
+
+
 					splitHeadN := strings.Split(headlineNBC, "-")
 					splitHeadB := strings.Split(headlineBreit, "-")
 					var sums [20]int
 					for i := range splitHeadN {
 						for j := range splitHeadB {
 							if splitHeadN[i] == splitHeadB[j] && len(splitHeadN[i]) > 1{
-								//fmt.Println(splitHeadN[i] + " " + splitHeadB[j])
 								sums[i] += 1
 							}
 						}
@@ -114,7 +141,7 @@ func main() {
 			}
 		}	
 	}
-	//fmt.Println(hCounts.Info)
+	fmt.Println(hCounts.Info)
 	var tempKey [2]string
 	tempSum := 0
 	for key := range hCounts.Info {
@@ -127,14 +154,11 @@ func main() {
 			tempKey = key
 		}
 	}
-	fmt.Println(tempSum)
-	fmt.Println(tempKey)
 	link1 = tempKey[0]
 	link2 = tempKey[1]
 
 	//Build the new index.html file
 	create_index(link1, link2)
-
 	startDash()
 
 }
@@ -221,7 +245,6 @@ func scrape(pageDetails pageInfo) {
 	c.OnHTML("a[href]", func(e *colly.HTMLElement) {
 		link := e.Request.AbsoluteURL(e.Attr("href"))
 		if link != "" {
-			//fmt.Println(link)
 			pageDetails.Links[link]++
 			
 
@@ -257,14 +280,9 @@ func scrape(pageDetails pageInfo) {
 
 	// })
 
-	// START scraping on.... en.wikipedia.org, foxnews.com, cnn.com, etc...
+	// START scraping
 	c.Visit("https://www.breitbart.com/")
 	c.Visit("https://www.nbcnews.com/")
-	// c.Visit("https://en.wikipedia.org/")
-	//c.Visit("https://www.foxnews.com/")
-	// c.Visit("https://www.cnbc.com/")
-	// c.Visit("https://www.cnn.com/")
-	// c.Visit("https://www.espn.com/")
 
 	// Wait until threads are finished
 	c.Wait()
